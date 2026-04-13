@@ -1,0 +1,13 @@
+{
+  "name": "st-final-project",
+  "private": true,
+  "scripts": {
+    "qa-report": "node scripts/qa-report-all.js",
+    "qa-report:xlsx": "node scripts/qa-json-to-xlsx.js",
+    "qa-report:all": "npm run qa-report && npm run qa-report:xlsx",
+    "test": "npm --prefix blog-api test"
+  },
+  "devDependencies": {
+    "exceljs": "^4.4.0"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "environmentDefault": "SQLite file blog.db (better-sqlite3); foreign_keys=ON; journal_mode=WAL",
+  "cases": {
+    "DB-INT-001": {
+      "module": "Database",
+      "testCaseId": "DB-INT-001",
+      "testTitle": "PRAGMA integrity_check reports ok",
+      "technique": "Structural validation",
+      "preConditions": "blog.db reachable",
+      "testSteps": "1. Run PRAGMA integrity_check",
+      "testData": "N/A",
+      "expectedResult": "Single row value 'ok'",
+      "postConditions": "Database file unchanged",
+      "classification": "positive_true"
+    },
+    "DB-SCH-001": {
+      "module": "Database",
+      "testCaseId": "DB-SCH-001",
+      "testTitle": "users table has required columns",
+      "technique": "Schema inspection (table_info)",
+      "preConditions": "users table exists",
+      "testSteps": "1. PRAGMA table_info(users) 2. Assert id, email, passwordHash present",
+      "testData": "N/A",
+      "expectedResult": "All required column names exist",
+      "postConditions": "N/A",
+      "classification": "positive_true"
+    },
+    "DB-SCH-002": {
+      "module": "Database",
+      "testCaseId": "DB-SCH-002",
+      "testTitle": "posts table has required columns and authorId foreign key metadata",
+      "technique": "Schema inspection (table_info + foreign_key_list)",
+      "preConditions": "posts table exists",
+      "testSteps": "1. PRAGMA table_info(posts) 2. PRAGMA foreign_key_list(posts)",
+      "testData": "N/A",
+      "expectedResult": "Required columns present; at least one FK referencing users",
+      "postConditions": "N/A",
+      "classification": "positive_true"
+    },
+    "DB-DATA-001": {
+      "module": "Database",
+      "testCaseId": "DB-DATA-001",
+      "testTitle": "No orphan posts (every authorId references users.id)",
+      "technique": "Referential data integrity query",
+      "preConditions": "posts and users populated or empty",
+      "testSteps": "1. LEFT JOIN posts to users WHERE user missing 2. Count = 0",
+      "testData": "N/A",
+      "expectedResult": "Orphan count is 0",
+      "postConditions": "N/A",
+      "classification": "positive_true"
+    },
+    "DB-NEG-001": {
+      "module": "Database",
+      "testCaseId": "DB-NEG-001",
+      "testTitle": "Insert post with non-existent authorId is rejected",
+      "technique": "Negative testing (foreign key enforcement)",
+      "preConditions": "foreign_keys pragma ON",
+      "testSteps": "1. Attempt INSERT into posts with random author UUID not in users",
+      "testData": "Random UUID for authorId",
+      "expectedResult": "Insert throws or SQLITE_CONSTRAINT",
+      "postConditions": "No partial row committed",
+      "classification": "positive_false"
+    }
+  }
+}

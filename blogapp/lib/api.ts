@@ -14,6 +14,7 @@ export type ApiUser = {
   name: string;
   email: string;
   avatar: string | null;
+  role?: string;
   createdAt: string;
 };
 

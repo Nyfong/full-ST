@@ -40,4 +40,8 @@ function remove(id) {
   return result.changes > 0;
 }
 
-module.exports = { create, list, findById, update, remove };
+function reset() {
+  db.prepare('DELETE FROM posts').run();
+}
+
+module.exports = { create, list, findById, update, remove, reset };

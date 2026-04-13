@@ -46,4 +46,8 @@ function toSafeUser(user) {
   };
 }
 
-module.exports = { create, findByEmail, findById, update, toSafeUser };
+function reset() {
+  db.prepare('DELETE FROM users').run();
+}
+
+module.exports = { create, findByEmail, findById, update, toSafeUser, reset };

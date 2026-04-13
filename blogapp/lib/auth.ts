@@ -1,13 +1,22 @@
 "use client";
 
+import type { ApiUser } from "./api";
+
 const TOKEN_KEY = "blog_token";
 const USER_KEY = "blog_user";
 
 export type StoredUser = { id: string; name: string; email: string; avatar: string | null; role: string };
 
-export function saveAuth(token: string, user: StoredUser) {
+export function saveAuth(token: string, user: ApiUser) {
+  const stored: StoredUser = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    avatar: user.avatar,
+    role: user.role ?? "user",
+  };
   localStorage.setItem(TOKEN_KEY, token);
-  localStorage.setItem(USER_KEY, JSON.stringify(user));
+  localStorage.setItem(USER_KEY, JSON.stringify(stored));
 }
 
 export function getToken(): string | null {

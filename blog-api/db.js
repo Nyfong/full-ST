@@ -5,6 +5,7 @@ const db = new Database(path.join(__dirname, 'blog.db'));
 
 // Enable WAL mode for better concurrent read performance
 db.pragma('journal_mode = WAL');
+db.pragma('foreign_keys = ON');
 
 // Migration: add role column if it doesn't exist yet
 const cols = db.pragma('table_info(users)');

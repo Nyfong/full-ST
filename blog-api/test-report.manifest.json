@@ -1,0 +1,53 @@
+{
+  "environmentDefault": "Backend: Node.js + Express; DB: SQLite (better-sqlite3); Test runner: Jest + supertest; OS: local dev",
+  "cases": {
+    "Auth API registers and returns token": {
+      "module": "Authentication",
+      "testCaseId": "TC-AUTH-001",
+      "testTitle": "Register new user with valid payload returns 201 and JWT",
+      "technique": "Equivalence partitioning (valid class)",
+      "preConditions": "API running; users table empty for test email",
+      "testSteps": "1. POST /api/v1/auth/register with name, email, password",
+      "testData": "name=Jane Doe, email=jane@example.com, password=secret123",
+      "expectedResult": "HTTP 201; body contains user (email matches) and non-empty token",
+      "postConditions": "User row exists; can authenticate with same credentials",
+      "classification": "positive_true"
+    },
+    "Auth API logs in and returns token": {
+      "module": "Authentication",
+      "testCaseId": "TC-AUTH-002",
+      "testTitle": "Login with registered credentials returns 200 and JWT",
+      "technique": "State transition (registered → authenticated)",
+      "preConditions": "User jane@example.com registered with known password",
+      "testSteps": "1. Register user. 2. POST /api/v1/auth/login with email and password",
+      "testData": "email=jane@example.com, password=secret123",
+      "expectedResult": "HTTP 200; body contains non-empty token",
+      "postConditions": "Session/token usable for protected routes",
+      "classification": "positive_true"
+    },
+    "Posts API creates and fetches a post": {
+      "module": "Posts",
+      "testCaseId": "TC-POST-001",
+      "testTitle": "Authenticated user creates post and public GET returns it",
+      "technique": "End-to-end API flow (Create + Read)",
+      "preConditions": "Valid JWT for a user",
+      "testSteps": "1. POST /api/v1/posts with Bearer token. 2. GET /api/v1/posts/:id without token",
+      "testData": "title=Hello MVC, content=This is my first post in the API service.",
+      "expectedResult": "Create returns 201 with post id; GET returns 200 and same title",
+      "postConditions": "Post persisted; visible via read API",
+      "classification": "positive_true"
+    },
+    "Posts API rejects creating a post without token": {
+      "module": "Posts",
+      "testCaseId": "TC-POST-002",
+      "testTitle": "Create post without Authorization header is rejected",
+      "technique": "Negative testing / security (missing auth)",
+      "preConditions": "No Authorization header",
+      "testSteps": "1. POST /api/v1/posts with title and content only (no Bearer token)",
+      "testData": "title=No Auth, content=This request should be rejected by auth middleware.",
+      "expectedResult": "HTTP 401 Unauthorized; post not created",
+      "postConditions": "No new post from unauthenticated request",
+      "classification": "positive_false"
+    }
+  }
+}

@@ -5,7 +5,9 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "test:report": "node ./scripts/generate-test-report.js",
+    "test:report:db": "node ./scripts/qa-database-report.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

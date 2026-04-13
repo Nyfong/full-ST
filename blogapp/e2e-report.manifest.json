@@ -1,0 +1,41 @@
+{
+  "environmentDefault": "Browser: Chromium or Google Chrome (Playwright); Frontend: Next.js start :3055; API: Express :5055; DB: SQLite blog-api/blog.db",
+  "cases": {
+    "smoke.spec.ts › Public pages › home loads with MetaBlog title": {
+      "module": "Frontend (E2E)",
+      "testCaseId": "TC-FE-001",
+      "testTitle": "Home page loads and document title contains MetaBlog",
+      "technique": "Smoke / UI presence",
+      "preConditions": "Next.js and blog-api running (Playwright webServer)",
+      "testSteps": "1. Navigate to /. 2. Assert document title matches MetaBlog",
+      "testData": "URL /",
+      "expectedResult": "Title matches /MetaBlog/",
+      "postConditions": "N/A",
+      "classification": "positive_true"
+    },
+    "smoke.spec.ts › Public pages › login page shows welcome heading": {
+      "module": "Frontend (E2E)",
+      "testCaseId": "TC-FE-002",
+      "testTitle": "Login route renders primary heading",
+      "technique": "Equivalence partitioning (public auth page)",
+      "preConditions": "App reachable",
+      "testSteps": "1. Navigate to /login. 2. Assert heading 'Welcome back' visible",
+      "testData": "URL /login",
+      "expectedResult": "Heading visible",
+      "postConditions": "N/A",
+      "classification": "positive_true"
+    },
+    "smoke.spec.ts › Security (guest) › admin URL redirects guest to login": {
+      "module": "Frontend (E2E)",
+      "testCaseId": "TC-FE-003",
+      "testTitle": "Unauthenticated user cannot stay on /admin",
+      "technique": "Negative testing / access control",
+      "preConditions": "No auth cookies/localStorage for a session (fresh context)",
+      "testSteps": "1. Navigate to /admin. 2. Expect redirect to /login",
+      "testData": "URL /admin",
+      "expectedResult": "Final URL matches /login",
+      "postConditions": "Admin UI not shown to guest",
+      "classification": "positive_false"
+    }
+  }
+}
